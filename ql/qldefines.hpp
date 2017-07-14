@@ -71,10 +71,11 @@
     #define QL_DEBUG
 #endif
 
-#if   defined(HAVE_CONFIG_H)    // Dynamically created by configure
-   #include <ql/config.hpp>
-#else                           // We hope that the compiler follows ANSI
-   #include <ql/config.ansi.hpp>
+// On non-Visual Studio platforms, configuration is handled by CMake options
+#ifndef _MSC_VER
+#include <ql/config.hpp>
+#else
+#include <ql/userconfig.hpp>
 #endif
 
 
@@ -86,6 +87,7 @@
 #endif
 
 // ensure that needed math constants are defined
+#include <limits>
 #include <ql/mathconstants.hpp>
 
 
@@ -132,8 +134,11 @@
 
 /*! @}  */
 
+//Visual Studio claims to support [[deprecated]] flag, but it really doesn't
+#ifndef _MSC_VER
 #define QL_DEPRECATED [[deprecated]]
-
-
+#else
+#define QL_DEPRECATED __declspec(deprecated)
+#endif
 
 #endif

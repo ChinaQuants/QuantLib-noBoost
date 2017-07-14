@@ -23,8 +23,6 @@
 
 #include <ql/qldefines.hpp>
 
-#ifndef QL_PATCH_SOLARIS
-
 #include <ql/experimental/credit/syntheticcdo.hpp>
 
 namespace QuantLib {
@@ -44,7 +42,7 @@ namespace QuantLib {
     */
     class MidPointCDOEngine : public SyntheticCDO::engine {
     public:
-        MidPointCDOEngine(
+        explicit MidPointCDOEngine(
             const Handle<YieldTermStructure>& discountCurve)
         : discountCurve_(discountCurve) {}
         void calculate() const;
@@ -53,7 +51,5 @@ namespace QuantLib {
     };
 
 }
-
-#endif
 
 #endif

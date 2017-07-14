@@ -41,23 +41,14 @@
 #include <ql/experimental/finitedifferences/squarerootprocessrndcalculator.hpp>
 #include <ql/models/equity/hestonmodel.hpp>
 #include <ql/types.hpp>
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
 #include <functional>
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
-
 #include <memory>
 #include <algorithm>
 
 using namespace QuantLib;
 
 
-TEST_CASE( "RiskNeutralDensityCalculator_DensityAgainstOptionPrices", "[RiskNeutralDensityCalculator]" ) {
+TEST_CASE("RiskNeutralDensityCalculator_DensityAgainstOptionPrices", "[RiskNeutralDensityCalculator]") {
     INFO("Testing density against option prices...");
 
     SavedSettings backup;
@@ -131,7 +122,7 @@ TEST_CASE( "RiskNeutralDensityCalculator_DensityAgainstOptionPrices", "[RiskNeut
     }
 }
 
-TEST_CASE( "RiskNeutralDensityCalculator_BSMagainstHestonRND", "[RiskNeutralDensityCalculator]" ) {
+TEST_CASE("RiskNeutralDensityCalculator_BSMagainstHestonRND", "[RiskNeutralDensityCalculator]") {
     INFO("Testing Black-Scholes-Merton and Heston densities...");
 
     SavedSettings backup;
@@ -298,7 +289,7 @@ namespace {
     }
 }
 
-TEST_CASE( "RiskNeutralDensityCalculator_LocalVolatilityRND", "[RiskNeutralDensityCalculator]" ) {
+TEST_CASE("RiskNeutralDensityCalculator_LocalVolatilityRND", "[RiskNeutralDensityCalculator]") {
     INFO("Testing Fokker-Planck forward equation "
                        "for local volatility process to calculate "
                        "risk neutral densities...");
@@ -488,7 +479,7 @@ TEST_CASE( "RiskNeutralDensityCalculator_LocalVolatilityRND", "[RiskNeutralDensi
     }
 }
 
-TEST_CASE( "RiskNeutralDensityCalculator_SquareRootProcessRND", "[RiskNeutralDensityCalculator]" ) {
+TEST_CASE("RiskNeutralDensityCalculator_SquareRootProcessRND", "[RiskNeutralDensityCalculator]") {
     INFO("Testing probability density for a square root process...");
 
     struct SquareRootProcessParams {
@@ -579,7 +570,7 @@ TEST_CASE( "RiskNeutralDensityCalculator_SquareRootProcessRND", "[RiskNeutralDen
     }
 }
 
-TEST_CASE( "RiskNeutralDensityCalculator_BlackScholesWithSkew", "[RiskNeutralDensityCalculator]" ) {
+TEST_CASE("RiskNeutralDensityCalculator_BlackScholesWithSkew", "[RiskNeutralDensityCalculator]") {
     INFO(
         "Testing probability density for a BSM process "
         "with strike dependent volatility vs local volatility...");

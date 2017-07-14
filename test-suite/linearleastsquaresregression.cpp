@@ -22,20 +22,12 @@
 #include <ql/math/functional.hpp>
 #include <ql/math/randomnumbers/rngtraits.hpp>
 #include <ql/math/linearleastsquaresregression.hpp>
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
 #include <functional>
 #include "circular_buffer.hpp"
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
 
 using namespace QuantLib;
 
-
-TEST_CASE( "LinearLeastSquaresRegression_Regression", "[LinearLeastSquaresRegression]" ) {
+TEST_CASE("LinearLeastSquaresRegression_Regression", "[LinearLeastSquaresRegression]") {
 
     INFO("Testing linear least-squares regression...");
 
@@ -50,7 +42,7 @@ TEST_CASE( "LinearLeastSquaresRegression_Regression", "[LinearLeastSquaresRegres
     v.emplace_back(constant(1.0));
     v.emplace_back(identity);
     v.emplace_back(square);
-    v.emplace_back(std::ptr_fun<Real, Real>(std::sin));
+    v.emplace_back([](Real x){return std::sin(x);});
 
     std::vector<std::function<Real(Real)> > w(v);
     w.emplace_back(square);
@@ -113,7 +105,7 @@ namespace {
     }
 }
 
-TEST_CASE( "LinearLeastSquaresRegression_MultiDimRegression", "[LinearLeastSquaresRegression]" ) {
+TEST_CASE("LinearLeastSquaresRegression_MultiDimRegression", "[LinearLeastSquaresRegression]") {
 
     INFO(
         "Testing multi-dimensional linear least-squares regression...");
@@ -185,7 +177,7 @@ TEST_CASE( "LinearLeastSquaresRegression_MultiDimRegression", "[LinearLeastSquar
     }
 }
 
-TEST_CASE( "LinearLeastSquaresRegression_1dLinearRegression", "[LinearLeastSquaresRegression]" ) {
+TEST_CASE("LinearLeastSquaresRegression_1dLinearRegression", "[LinearLeastSquaresRegression]") {
 
     INFO("Testing 1D simple linear least-squares regression...");
 

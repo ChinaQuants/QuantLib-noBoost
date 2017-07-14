@@ -42,29 +42,15 @@
 #include <ql/methods/montecarlo/pathgenerator.hpp>
 #include <ql/termstructures/volatility/equityfx/hestonblackvolsurface.hpp>
 #include <ql/termstructures/volatility/equityfx/noexceptlocalvolsurface.hpp>
-
 #include <ql/experimental/models/squarerootclvmodel.hpp>
 #include <ql/experimental/models/hestonslvfdmmodel.hpp>
 #include <ql/experimental/processes/hestonslvprocess.hpp>
 #include <ql/experimental/finitedifferences/fdhestondoublebarrierengine.hpp>
 #include <ql/experimental/barrieroption/analyticdoublebarrierbinaryengine.hpp>
-
 #include <ql/experimental/volatility/sabrvoltermstructure.hpp>
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
-
-
 #include <set>
 
 using namespace QuantLib;
-
-
 
 namespace {
     class CLVModelPayoff : public PlainVanillaPayoff {
@@ -84,7 +70,7 @@ namespace {
 }
 
 
-TEST_CASE( "SquareRootCLVModel_SquareRootCLVVanillaPricing", "[SquareRootCLVModel]" ) {
+TEST_CASE("SquareRootCLVModel_SquareRootCLVVanillaPricing", "[SquareRootCLVModel]") {
     INFO(
         "Testing vanilla option pricing with square root kernel process...");
 
@@ -166,7 +152,7 @@ TEST_CASE( "SquareRootCLVModel_SquareRootCLVVanillaPricing", "[SquareRootCLVMode
 }
 
 #ifdef MULTIPRECISION_NON_CENTRAL_CHI_SQUARED_QUADRATURE
-TEST_CASE( "SquareRootCLVModel_SquareRootCLVMappingFunction", "[.]" ) {
+TEST_CASE("SquareRootCLVModel_SquareRootCLVMappingFunction", "[.]") {
     INFO(
         "Testing mapping function of the square root kernel process...");
 
@@ -455,7 +441,7 @@ namespace {
 }
 
 #ifdef MULTIPRECISION_NON_CENTRAL_CHI_SQUARED_QUADRATURE
-TEST_CASE( "SquareRootCLVModel_ForwardSkew", "[.]" ) {
+TEST_CASE("SquareRootCLVModel_ForwardSkew", "[.]") {
     INFO(
         "Testing forward skew dynamics with square root kernel process...");
 

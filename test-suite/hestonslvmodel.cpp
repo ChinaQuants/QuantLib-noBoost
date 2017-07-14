@@ -87,18 +87,9 @@
 #include <ql/experimental/processes/hestonslvprocess.hpp>
 #include <ql/experimental/barrieroption/doublebarrieroption.hpp>
 #include <ql/experimental/barrieroption/analyticdoublebarrierbinaryengine.hpp>
-
-
 #include <functional>
 #include <memory>
 #include <algorithm>
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
 
 using namespace QuantLib;
 
@@ -161,7 +152,7 @@ namespace {
     }
 }
 
-TEST_CASE( "HestonSLVModel_BlackScholesFokkerPlanckFwdEquation", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_BlackScholesFokkerPlanckFwdEquation", "[HestonSLVModel]") {
     INFO("Testing Fokker-Planck forward equation for BS process...");
 
     SavedSettings backup;
@@ -283,7 +274,7 @@ namespace {
     }
 }
 
-TEST_CASE( "HestonSLVModel_SquareRootZeroFlowBC", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_SquareRootZeroFlowBC", "[HestonSLVModel]") {
     INFO("Testing zero-flow BC for the square root process...");
 
     SavedSettings backup;
@@ -374,7 +365,7 @@ namespace {
 }
 
 
-TEST_CASE( "HestonSLVModel_TransformedZeroFlowBC", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_TransformedZeroFlowBC", "[HestonSLVModel]") {
     INFO("Testing zero-flow BC for transformed "
                        "Fokker-Planck forward equation...");
 
@@ -438,7 +429,7 @@ namespace {
     };
 }
 
-TEST_CASE( "HestonSLVModel_SquareRootEvolveWithStationaryDensity", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_SquareRootEvolveWithStationaryDensity", "[HestonSLVModel]") {
     INFO("Testing Fokker-Planck forward equation "
                        "for the square root process with stationary density...");
 
@@ -518,7 +509,7 @@ TEST_CASE( "HestonSLVModel_SquareRootEvolveWithStationaryDensity", "[HestonSLVMo
     }
 }
 
-TEST_CASE( "HestonSLVModel_SquareRootLogEvolveWithStationaryDensity", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_SquareRootLogEvolveWithStationaryDensity", "[HestonSLVModel]") {
     INFO("Testing Fokker-Planck forward equation "
                        "for the square root log process with stationary density...");
 
@@ -543,10 +534,6 @@ TEST_CASE( "HestonSLVModel_SquareRootLogEvolveWithStationaryDensity", "[HestonSL
 
         const Real expected = 1-eps-lowEps;
         const Real vMax = rnd.stationary_invcdf(1-eps);
-
-        std::vector<Real> critialPoints;
-        std::vector<std::tuple<Real, Real, bool> > critPoints;
-        critPoints.emplace_back(std::tuple<Real, Real, bool>(log(vMin), 0.001, false));
 
         const std::shared_ptr<FdmMesherComposite> mesher(
             new FdmMesherComposite(std::shared_ptr<Fdm1dMesher>(
@@ -587,7 +574,7 @@ TEST_CASE( "HestonSLVModel_SquareRootLogEvolveWithStationaryDensity", "[HestonSL
     }
 }
 
-TEST_CASE( "HestonSLVModel_SquareRootFokkerPlanckFwdEquation", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_SquareRootFokkerPlanckFwdEquation", "[HestonSLVModel]") {
     INFO("Testing Fokker-Planck forward equation "
                        "for the square root process with Dirac start...");
 
@@ -916,7 +903,7 @@ namespace {
     }
 }
 
-TEST_CASE( "HestonSLVModel_HestonFokkerPlanckFwdEquation", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_HestonFokkerPlanckFwdEquation", "[HestonSLVModel]") {
     INFO("Testing Fokker-Planck forward equation "
                        "for the Heston process...");
 
@@ -1067,7 +1054,7 @@ namespace {
     }
 }
 
-TEST_CASE( "HestonSLVModel_HestonFokkerPlanckFwdEquationLogLVLeverage", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_HestonFokkerPlanckFwdEquationLogLVLeverage", "[HestonSLVModel]") {
     INFO("Testing Fokker-Planck forward equation "
                        "for the Heston process Log Transformation with leverage LV limiting case...");
 
@@ -1235,7 +1222,7 @@ TEST_CASE( "HestonSLVModel_HestonFokkerPlanckFwdEquationLogLVLeverage", "[Heston
 }
 
 
-TEST_CASE( "HestonSLVModel_BlackScholesFokkerPlanckFwdEquationLocalVol", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_BlackScholesFokkerPlanckFwdEquationLocalVol", "[HestonSLVModel]") {
     INFO(
             "Testing Fokker-Planck forward equation for BS Local Vol process...");
 
@@ -1479,7 +1466,7 @@ namespace {
 
 
 
-TEST_CASE( "HestonSLVModel_FDMCalibration", "[.]" ) {
+TEST_CASE("HestonSLVModel_FDMCalibration", "[.]") {
     SavedSettings backup;
 
     const HestonSLVFokkerPlanckFdmParams plainParams =
@@ -1525,7 +1512,7 @@ TEST_CASE( "HestonSLVModel_FDMCalibration", "[.]" ) {
 
 }
 
-TEST_CASE( "HestonSLVModel_LocalVolsvSLVPropDensity", "[.]" ) {
+TEST_CASE("HestonSLVModel_LocalVolsvSLVPropDensity", "[.]") {
     INFO("Testing local volatility vs SLV model");
 
     SavedSettings backup;
@@ -1625,7 +1612,7 @@ TEST_CASE( "HestonSLVModel_LocalVolsvSLVPropDensity", "[.]" ) {
 }
 
 
-TEST_CASE( "HestonSLVModel_BarrierPricingViaHestonLocalVol", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_BarrierPricingViaHestonLocalVol", "[HestonSLVModel]") {
     INFO("Testing calibration via vanilla options...");
 
     SavedSettings backup;
@@ -1727,7 +1714,7 @@ TEST_CASE( "HestonSLVModel_BarrierPricingViaHestonLocalVol", "[HestonSLVModel]" 
     }
 }
 
-TEST_CASE( "HestonSLVModel_BarrierPricingMixedModels", "[.]" ) {
+TEST_CASE("HestonSLVModel_BarrierPricingMixedModels", "[.]") {
     INFO("Testing Barrier pricing with mixed models...");
 
     SavedSettings backup;
@@ -1852,7 +1839,7 @@ TEST_CASE( "HestonSLVModel_BarrierPricingMixedModels", "[.]" ) {
     }
 }
 
-TEST_CASE( "HestonSLVModel_MonteCarloVsFdmPricing", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_MonteCarloVsFdmPricing", "[HestonSLVModel]") {
     INFO(
         "Testing Monte-Carlo vs FDM Pricing for "
         "Heston SLV models...");
@@ -1938,7 +1925,7 @@ TEST_CASE( "HestonSLVModel_MonteCarloVsFdmPricing", "[HestonSLVModel]" ) {
     }
 }
 
-TEST_CASE( "HestonSLVModel_MonteCarloCalibration", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_MonteCarloCalibration", "[HestonSLVModel]") {
     INFO(
         "Testing Monte-Carlo Calibration...");
 
@@ -2069,7 +2056,7 @@ TEST_CASE( "HestonSLVModel_MonteCarloCalibration", "[HestonSLVModel]" ) {
 }
 
 
-TEST_CASE( "HestonSLVModel_ForwardSkewSLV", "[.]" ) {
+TEST_CASE("HestonSLVModel_ForwardSkewSLV", "[.]") {
     INFO("Testing the implied volatility skew of "
         "forward starting options in SLV model...");
 
@@ -2327,7 +2314,7 @@ namespace {
     }
 }
 
-TEST_CASE( "HestonSLVModel_MoustacheGraph", "[HestonSLVModel]" ) {
+TEST_CASE("HestonSLVModel_MoustacheGraph", "[HestonSLVModel]") {
     INFO(
         "Testing double no touch pricing with SLV and mixing...");
 

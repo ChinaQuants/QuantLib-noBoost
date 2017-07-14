@@ -18,7 +18,7 @@
 */
 
 #include "utilities.hpp"
-
+#include <array>
 #include <ql/math/functional.hpp>
 #include <ql/quotes/simplequote.hpp>
 #include <ql/time/daycounters/actualactual.hpp>
@@ -64,7 +64,7 @@ namespace {
     }
 }
 
-TEST_CASE( "SwingOption_ExtendedOrnsteinUhlenbeckProcess", "[SwingOption]" ) {
+TEST_CASE("SwingOption_ExtendedOrnsteinUhlenbeckProcess", "[SwingOption]") {
 
     INFO("Testing extended Ornstein-Uhlenbeck process...");
 
@@ -79,10 +79,9 @@ TEST_CASE( "SwingOption_ExtendedOrnsteinUhlenbeckProcess", "[SwingOption]" ) {
         ExtendedOrnsteinUhlenbeckProcess::Trapezodial,
         ExtendedOrnsteinUhlenbeckProcess::GaussLobatto};
 
-    std::function<Real (Real)> f[] 
-        = { constant(level),
-            std::bind1st(std::plus<Real>(), 1.0),
-            std::ptr_fun<Real, Real>(std::sin) }; 
+    std::array<std::function<Real (Real)>, 3> f { constant(level),
+            [](Real x){return 1.0 + x;},
+	    [](Real x){return std::sin(x);}};
 
     for (Size n=0; n < LENGTH(f); ++n) {
         ExtendedOrnsteinUhlenbeckProcess refProcess(
@@ -120,7 +119,7 @@ TEST_CASE( "SwingOption_ExtendedOrnsteinUhlenbeckProcess", "[SwingOption]" ) {
 
 
 
-TEST_CASE( "SwingOption_FdmExponentialJump1dMesher", "[SwingOption]" ) {
+TEST_CASE("SwingOption_FdmExponentialJump1dMesher", "[SwingOption]") {
 
     INFO("Testing finite difference mesher for the Kluge model...");
 
@@ -170,7 +169,7 @@ TEST_CASE( "SwingOption_FdmExponentialJump1dMesher", "[SwingOption]" ) {
     }
 }
 
-TEST_CASE( "SwingOption_ExtOUJumpVanillaEngine", "[SwingOption]" ) {
+TEST_CASE("SwingOption_ExtOUJumpVanillaEngine", "[SwingOption]") {
 
     INFO("Testing finite difference pricer for the Kluge model...");
 
@@ -251,7 +250,7 @@ namespace {
     };
 }
 
-TEST_CASE( "SwingOption_FdBSSwingOption", "[SwingOption]" ) {
+TEST_CASE("SwingOption_FdBSSwingOption", "[SwingOption]") {
 
     INFO("Testing Black-Scholes vanilla swing option pricing...");
 
@@ -328,7 +327,7 @@ TEST_CASE( "SwingOption_FdBSSwingOption", "[SwingOption]" ) {
 }
 
 
-TEST_CASE( "SwingOption_ExtOUJumpSwingOption", "[SwingOption]" ) {
+TEST_CASE("SwingOption_ExtOUJumpSwingOption", "[SwingOption]") {
 
     INFO("Testing simple swing option pricing for Kluge model...");
 

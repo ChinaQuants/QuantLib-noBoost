@@ -53,6 +53,11 @@ namespace QuantLib {
 
         long double derivative(long double x) const;
 
+        // parameters
+        long double mean() const;
+
+        long double stddev() const;
+
     private:
         long double average_, sigma_, normalizationFactor_, denominator_,
                 derNormalizationFactor_;
@@ -152,11 +157,7 @@ namespace QuantLib {
         */
         static long double tail_value(long double x);
 
-#if defined(QL_PATCH_SOLARIS)
-        CumulativeNormalDistribution f_;
-#else
         static const CumulativeNormalDistribution f_;
-#endif
         long double average_, sigma_;
         static const long double a1_;
         static const long double a2_;
@@ -271,7 +272,6 @@ namespace QuantLib {
         const long double average_, sigma_;
     };
 
-
     // inline definitions
 
     inline NormalDistribution::NormalDistribution(long double average,
@@ -281,7 +281,6 @@ namespace QuantLib {
         QL_REQUIRE(sigma_ > 0.0,
                    "sigma must be greater than 0.0 ("
                            << sigma_ << " not allowed)");
-
         normalizationFactor_ = M_SQRT_2 * M_1_SQRTPI / sigma_;
         derNormalizationFactor_ = sigma_ * sigma_;
         denominator_ = 2.0 * derNormalizationFactor_;
@@ -297,6 +296,14 @@ namespace QuantLib {
 
     inline long double NormalDistribution::derivative(long double x) const {
         return ((*this)(x) * (average_ - x)) / derNormalizationFactor_;
+    }
+
+    inline long double NormalDistribution::mean() const {
+        return average_;
+    }
+
+    inline long double NormalDistribution::stddev() const {
+        return sigma_;
     }
 
     inline CumulativeNormalDistribution::CumulativeNormalDistribution(
@@ -329,18 +336,6 @@ namespace QuantLib {
         QL_REQUIRE(sigma_ > 0.0,
                    "sigma must be greater than 0.0 ("
                            << sigma_ << " not allowed)");
-    }
-
-    inline long double quantile(const std::normal_distribution<long double> &dist, long double p) {
-        return dist.mean() + dist.stddev() * InverseCumulativeNormal()(p);
-    };
-
-    inline long double cdf(const std::normal_distribution<long double> &dist, long double p) {
-        return CumulativeNormalDistribution(dist.mean(), dist.stddev())(p);
-    }
-
-    inline long double pdf(const std::normal_distribution<long double> &dist, long double p) {
-        return NormalDistribution(dist.mean(), dist.stddev())(p);
     }
 }
 

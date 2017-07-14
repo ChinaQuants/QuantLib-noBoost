@@ -87,7 +87,7 @@ namespace {
 }
 
 
-TEST_CASE( "VPP_GemanRoncoroniProcess", "[VPP]" ) {
+TEST_CASE("VPP_GemanRoncoroniProcess", "[VPP]") {
 
     INFO("Testing Geman-Roncoroni process...");
 
@@ -212,7 +212,7 @@ TEST_CASE( "VPP_GemanRoncoroniProcess", "[VPP]" ) {
     }
 }
 
-TEST_CASE( "VPP_SimpleExtOUStorageEngine", "[VPP]" ) {
+TEST_CASE("VPP_SimpleExtOUStorageEngine", "[VPP]") {
 
     INFO("Testing simple-storage option based on ext. OU model...");
 
@@ -260,7 +260,7 @@ TEST_CASE( "VPP_SimpleExtOUStorageEngine", "[VPP]" ) {
 }
 
 
-TEST_CASE( "VPP_KlugeExtOUSpreadOption", "[VPP]" ) {
+TEST_CASE("VPP_KlugeExtOUSpreadOption", "[VPP]") {
 
     INFO("Testing simple Kluge ext-Ornstein-Uhlenbeck spread option...");
 
@@ -393,7 +393,7 @@ namespace {
                               51.59,57.44,56.50,55.12,57.22,54.61,49.92,45.20};
 }
 
-TEST_CASE( "VPP_VPPIntrinsicValue", "[VPP]" ) {
+TEST_CASE("VPP_VPPIntrinsicValue", "[VPP]") {
 
     INFO("Testing VPP step condition...");
 
@@ -550,7 +550,7 @@ namespace {
 }
 
 
-TEST_CASE( "VPP_VPPPricing", "[VPP]" ) {
+TEST_CASE("VPP_VPPPricing", "[VPP]") {
     INFO("Testing VPP pricing using perfect foresight or FDM...");
 
     SavedSettings backup;
@@ -869,8 +869,7 @@ TEST_CASE( "VPP_VPPPricing", "[VPP]" ) {
     }
 }
 
-TEST_CASE( "VPP_KlugeExtOUMatrixDecomposition", "[VPP]" ) {
-#ifndef QL_NO_UBLAS_SUPPORT
+TEST_CASE("VPP_KlugeExtOUMatrixDecomposition", "[VPP]") {
     INFO("Testing KlugeExtOU matrix decomposition...");
 
     SavedSettings backup;
@@ -923,8 +922,8 @@ TEST_CASE( "VPP_KlugeExtOUMatrixDecomposition", "[VPP]" ) {
     const Array applyExpectedMixed = op->apply_mixed(x);
 
     const std::vector<SparseMatrix> matrixDecomp(op->toMatrixDecomp());
-    const Array applyCalculated = prod(op->toMatrix(), x);
-    const Array applyCalculatedMixed = prod(matrixDecomp.back(), x);
+    const Array applyCalculated = op->toMatrix()* x;
+    const Array applyCalculatedMixed = matrixDecomp.back()* x;
 
     for (Size i=0; i < x.size(); ++i) {
         const Real diffApply = std::fabs(applyExpected[i]-applyCalculated[i]);
@@ -947,7 +946,7 @@ TEST_CASE( "VPP_KlugeExtOUMatrixDecomposition", "[VPP]" ) {
 
     for (Size i=0; i < 3; ++i) {
         const Array applyExpectedDir = op->apply_direction(i, x);
-        const Array applyCalculatedDir = prod(matrixDecomp[i], x);
+        const Array applyCalculatedDir = matrixDecomp[i]* x;
 
         for (Size j=0; j < x.size(); ++j) {
             const Real diff
@@ -961,5 +960,4 @@ TEST_CASE( "VPP_KlugeExtOUMatrixDecomposition", "[VPP]" ) {
             }
         }
     }
-#endif
 }

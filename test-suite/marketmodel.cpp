@@ -150,8 +150,8 @@ namespace {
 
     // a simple structure to store some data which will be used during tests
     struct SubProductExpectedValues {
-        SubProductExpectedValues(const std::string &descr) :
-                description(descr), testBias(false) {}
+        explicit SubProductExpectedValues(const std::string& descr)
+        : description(descr), testBias(false) {}
 
         std::string description;
         std::vector<Real> values;
@@ -320,17 +320,17 @@ namespace {
         std::vector<Rate> bumpedForwards(todaysForwards.size());
         std::transform(todaysForwards.begin(), todaysForwards.end(),
                        bumpedForwards.begin(),
-                       std::bind1st(std::plus<Rate>(), forwardBump));
+		       [&forwardBump](Rate x){return forwardBump + x;});
 
         std::vector<Volatility> bumpedVols(volatilities.size());
         if (logNormal)
             std::transform(volatilities.begin(), volatilities.end(),
                            bumpedVols.begin(),
-                           std::bind1st(std::plus<Rate>(), volBump));
+			   [&volBump](Rate x){return volBump + x;});
         else
             std::transform(normalVols.begin(), normalVols.end(),
                            bumpedVols.begin(),
-                           std::bind1st(std::plus<Rate>(), volBump));
+			   [&volBump](Rate x){return volBump + x;});
 
         Matrix correlations = exponentialCorrelations(evolution.rateTimes(),
                                                       longTermCorrelation,
@@ -4758,5 +4758,4 @@ TEST_CASE("MarketModel_Covariance", "[MarketModel]") {
         }
     }
 }
-
 

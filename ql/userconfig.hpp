@@ -25,9 +25,9 @@
    User configuration section:
    modify the following definitions to suit your preferences.
 
-   Do not modify this file if you are using a Linux/Unix system:
-   it will not be read by the compiler. The definitions below
-   will be provided by running ./configure instead.
+   This file is only read by Visual Studio compiler and has no 
+   effect on other compilers. The configuration is set by CMake
+   options instead.
 ****************************************************************/
 
 /* Define this if error messages should include current function
@@ -72,25 +72,16 @@
 //#   define QL_ENABLE_SESSIONS
 #endif
 
-/* Define this to enable the thread-safe observer pattern. You should
-   enable it if you want to use QuantLib via the SWIG layer within
-   the JVM or .NET eco system or any environment with an
-   async garbage collector */
-#ifndef QL_ENABLE_THREAD_SAFE_OBSERVER_PATTERN
-//#    define QL_ENABLE_THREAD_SAFE_OBSERVER_PATTERN
-#endif
-
-/* Define this to enable a date resolution down to nanoseconds and
-   allow for accurate intraday pricing.*/
-#ifndef QL_HIGH_RESOLUTION_DATE
-//#    define QL_HIGH_RESOLUTION_DATE
-#endif
-
 /* Define this to make Singleton initialization thread-safe.
    Note: There is no support for thread safety and multiple sessions.
 */
 #ifndef QL_ENABLE_SINGLETON_THREAD_SAFE_INIT
 //#   define QL_ENABLE_SINGLETON_THREAD_SAFE_INIT
+#endif
+
+/* Define this if Intel® MKL should be used for linear algebra routines. */
+#ifndef QL_USE_MKL
+//#    define QL_USE_MKL
 #endif
 
 #endif

@@ -49,19 +49,12 @@
 #include <ql/pricingengines/vanilla/analytichestonhullwhiteengine.hpp>
 #include <ql/pricingengines/vanilla/fdhestonvanillaengine.hpp>
 #include <ql/pricingengines/vanilla/fdhestonhullwhitevanillaengine.hpp>
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
 #include <functional>
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
 
 using namespace QuantLib;
 
 
-TEST_CASE( "HybridHestonHullWhiteProcess_BsmHullWhiteEngine", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_BsmHullWhiteEngine", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing European option pricing for a BSM process"
                        " with one-factor Hull-White model...");
 
@@ -158,7 +151,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_BsmHullWhiteEngine", "[HybridHestonHull
    }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_CompareBsmHWandHestonHW", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_CompareBsmHWandHestonHW", "[HybridHestonHullWhiteProcess]") {
     INFO("Comparing European option pricing for a BSM process"
                        " with one-factor Hull-White model...");
 
@@ -256,7 +249,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_CompareBsmHWandHestonHW", "[HybridHesto
    }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_ZeroBondPricing", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_ZeroBondPricing", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing Monte-Carlo zero bond pricing...");
 
     SavedSettings backup;
@@ -373,7 +366,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_ZeroBondPricing", "[HybridHestonHullWhi
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_McVanillaPricing", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_McVanillaPricing", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing Monte-Carlo vanilla option pricing...");
 
     SavedSettings backup;
@@ -469,7 +462,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_McVanillaPricing", "[HybridHestonHullWh
 }
 
 
-TEST_CASE( "HybridHestonHullWhiteProcess_McPureHestonPricing", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_McPureHestonPricing", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing Monte-Carlo Heston option pricing...");
 
     SavedSettings backup;
@@ -559,7 +552,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_McPureHestonPricing", "[HybridHestonHul
 }
 
 
-TEST_CASE( "HybridHestonHullWhiteProcess_AnalyticHestonHullWhitePricing", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_AnalyticHestonHullWhitePricing", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing analytic Heston Hull-White option pricing...");
 
     SavedSettings backup;
@@ -648,7 +641,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_AnalyticHestonHullWhitePricing", "[Hybr
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_CallableEquityPricing", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_CallableEquityPricing", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing the pricing of a callable equity product...");
 
     SavedSettings backup;
@@ -762,7 +755,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_CallableEquityPricing", "[HybridHestonH
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_DiscretizationError", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_DiscretizationError", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing the discretization error of the "
                        "Heston Hull-White process...");
 
@@ -856,7 +849,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_DiscretizationError", "[HybridHestonHul
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_FdmHestonHullWhiteEngine", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_FdmHestonHullWhiteEngine", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing the FDM Heston Hull-White engine...");
 
     SavedSettings backup;
@@ -1033,7 +1026,7 @@ namespace {
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_BsmHullWhitePricing", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_BsmHullWhitePricing", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing convergence speed of Heston-Hull-White engine...");
     
     SavedSettings backup;
@@ -1123,7 +1116,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_BsmHullWhitePricing", "[HybridHestonHul
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_SpatialDiscretizatinError", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_SpatialDiscretizatinError", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing spatial convergence speed of Heston engine...");
     
     SavedSettings backup;
@@ -1214,7 +1207,7 @@ namespace {
 }
 
 
-TEST_CASE( "HybridHestonHullWhiteProcess_HestonHullWhiteCalibration", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_HestonHullWhiteCalibration", "[HybridHestonHullWhiteProcess]") {
     INFO("Testing the Heston Hull-White calibration...");
 
     // Calibration of a hybrid Heston-Hull-White model using 
@@ -1417,7 +1410,7 @@ TEST_CASE( "HybridHestonHullWhiteProcess_HestonHullWhiteCalibration", "[HybridHe
     }
 }
 
-TEST_CASE( "HybridHestonHullWhiteProcess_H1HWPricingEngine", "[HybridHestonHullWhiteProcess]" ) {
+TEST_CASE("HybridHestonHullWhiteProcess_H1HWPricingEngine", "[HybridHestonHullWhiteProcess]") {
 
     SavedSettings backup;
 

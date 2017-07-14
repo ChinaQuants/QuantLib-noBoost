@@ -37,7 +37,7 @@ namespace {
     };
 }
 
-TEST_CASE( "Observable_ObservableSettings", "[Observable]" ) {
+TEST_CASE("Observable_ObservableSettings", "[Observable]") {
 
     INFO("Testing observable settings...");
 
@@ -93,6 +93,7 @@ TEST_CASE( "Observable_ObservableSettings", "[Observable]" ) {
 #ifdef QL_ENABLE_THREAD_SAFE_OBSERVER_PATTERN
 
 #include <list>
+#include <thread>
 
 namespace {
 
@@ -122,7 +123,7 @@ namespace {
         GarbageCollector() : terminate_(false) { }
 
         void addObj(const std::shared_ptr<MTUpdateCounter>& updateCounter) {
-            std::lock_guard<std::mutex> lock(mutex_);
+            std::scoped_lock<std::mutex> lock(mutex_);
             objList.emplace_back(updateCounter);
         }
 
@@ -130,20 +131,20 @@ namespace {
             while(!terminate_) {
                 Size objListSize;
                 {
-                    std::lock_guard<std::mutex> lock(mutex_);
+                    std::scoped_lock<std::mutex> lock(mutex_);
                     objListSize = objList.size();
                 }
 
                 if (objListSize > 20) {
                     // trigger gc
                     while (objListSize > 0) {
-                        std::lock_guard<std::mutex> lock(mutex_);
+                        std::scoped_lock<std::mutex> lock(mutex_);
                         objList.pop_front();
                         objListSize = objList.size();
                     }
                 }
 
-                std::this_thread::sleep(std::chrono::milliseconds(2));
+                std::this_thread::sleep_for(std::chrono::milliseconds(2));
             }
             objList.clear();
         }
@@ -159,7 +160,7 @@ namespace {
     };
 }
 
-TEST_CASE( "Observable_AsyncGarbagCollector", "[.]" ) {
+TEST_CASE("Observable_AsyncGarbagCollector", "[.]") {
 
     INFO("Testing observer pattern with an asynchronous "
                        "garbage collector (JVM/.NET use case)...");
@@ -191,7 +192,7 @@ TEST_CASE( "Observable_AsyncGarbagCollector", "[.]" ) {
 }
 
 
-TEST_CASE( "Observable_MultiThreadingGlobalSettings", "[.]" ) {
+TEST_CASE("Observable_MultiThreadingGlobalSettings", "[.]") {
 	INFO("Testing observer global settings in a "
 		               "multithreading environment...");
 	

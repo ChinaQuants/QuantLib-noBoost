@@ -22,15 +22,7 @@
 
 #include <ql/experimental/credit/constantlosslatentmodel.hpp>
 #include <ql/experimental/credit/defaultlossmodel.hpp>
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
 #include <functional>
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
 #include <map>
 #include <algorithm>
 
@@ -167,32 +159,20 @@ namespace QuantLib {
             basket_->remainingProbabilities(date);
 
         return copula_->integratedExpectedValue(
-            std::function<Real (const std::vector<Real>& v1)>(
-                std::bind(
-                    &RecursiveLossModel::expectedConditionalLoss,
-                    this,
-                    std::cref(uncDefProb),
-                    _1)
-                )
+            [this, &uncDefProb](const std::vector<Real>& x){return expectedConditionalLoss(uncDefProb, x);}
             );
             */
 /**/
-        std::vector<Probability> uncDefProb = 
-            basket_->remainingProbabilities(date);
+        std::vector<Probability> uncDefProb =
+                basket_->remainingProbabilities(date);
         std::vector<Real> invProb;
-        for(Size i=0; i<uncDefProb.size(); ++i)
-           invProb.emplace_back(copula_->inverseCumulativeY(uncDefProb[i], i));
-           ///  invProb.emplace_back(CP::inverseCumulativeY(uncDefProb[i], i));//<-static call
+        for (Size i = 0; i < uncDefProb.size(); ++i)
+            invProb.emplace_back(copula_->inverseCumulativeY(uncDefProb[i], i));
+        ///  invProb.emplace_back(CP::inverseCumulativeY(uncDefProb[i], i));//<-static call
         return copula_->integratedExpectedValue(
-            std::function<Real (const std::vector<Real>& v1)>(
-                std::bind(
-                    &RecursiveLossModel::expectedConditionalLossInvP,
-                    this,
-                    std::cref(invProb),
-                    _1)
-                )
-            );
-            
+                [this, &invProb](const std::vector<Real> &x) { return expectedConditionalLossInvP(invProb, x); }
+        );
+
     }
 
     template<class CP>
@@ -202,13 +182,7 @@ namespace QuantLib {
         std::vector<Probability> uncDefProb = 
             basket_->remainingProbabilities(date);
         return copula_->integratedExpectedValue(
-            std::function<std::vector<Real> (const std::vector<Real>& v1)>(
-                std::bind(
-                    &RecursiveLossModel::conditionalLossProb,
-                    this,
-                    std::cref(uncDefProb),
-                    _1)
-                )
+            [this, &uncDefProb](const std::vector<Real>& x){return conditionalLossProb(uncDefProb, x);}
             );
     }
 

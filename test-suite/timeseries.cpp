@@ -23,22 +23,12 @@
 #include <ql/prices.hpp>
 #include <ql/time/calendars/unitedstates.hpp>
 #include <functional>
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
-
 #include <unordered_map>
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
 
 using namespace QuantLib;
 
 
-TEST_CASE( "TimeSeries_Construction", "[TimeSeries]" ) {
+TEST_CASE("TimeSeries_Construction", "[TimeSeries]") {
 
     INFO("Testing time series construction...");
 
@@ -68,7 +58,7 @@ TEST_CASE( "TimeSeries_Construction", "[TimeSeries]" ) {
     }
 }
 
-TEST_CASE( "TimeSeries_IntervalPrice", "[TimeSeries]" ) {
+TEST_CASE("TimeSeries_IntervalPrice", "[TimeSeries]") {
     INFO("Testing time series interval price...");
 
     std::vector<Date> date;
@@ -106,7 +96,7 @@ namespace std {
 
 }
 
-TEST_CASE( "TimeSeries_Iterators", "[TimeSeries]" ) {
+TEST_CASE("TimeSeries_Iterators", "[TimeSeries]") {
     INFO("Testing time series iterators...");
     std::vector<Date> dates;
     std::vector<Real> prices;

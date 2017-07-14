@@ -27,19 +27,8 @@
 #include <ql/experimental/finitedifferences/fdmvppstepcondition.hpp>
 #include <ql/methods/finitedifferences/operators/fdmlinearopiterator.hpp>
 #include <ql/methods/finitedifferences/utilities/fdminnervaluecalculator.hpp>
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
-
 #include <functional>
 
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
-
-using namespace std::placeholders;
 namespace QuantLib {
     FdmVPPStepCondition::FdmVPPStepCondition(
         const FdmVPPStepConditionParams& params,
@@ -70,11 +59,11 @@ namespace QuantLib {
 
             if (j < tMinUp_) {
                 stateEvolveFcts_[i] = std::function<Real (Real)>(
-                    std::bind(&FdmVPPStepCondition::evolveAtPMin,this, _1));
+                        [this](Real x){return evolveAtPMin(x);});
             }
             else if (j < 2*tMinUp_){
                 stateEvolveFcts_[i] = std::function<Real (Real)>(
-                    std::bind(&FdmVPPStepCondition::evolveAtPMax,this, _1));
+                        [this](Real x){return evolveAtPMax(x);});
             }
         }
     }

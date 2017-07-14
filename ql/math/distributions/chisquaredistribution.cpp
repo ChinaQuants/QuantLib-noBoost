@@ -20,9 +20,16 @@
 
 #include <ql/math/solvers1d/brent.hpp>
 #include <ql/math/functional.hpp>
+#include <ql/math/incompletegamma.hpp>
 #include <ql/math/distributions/chisquaredistribution.hpp>
 #include <ql/math/distributions/gammadistribution.hpp>
 #include <ql/math/distributions/normaldistribution.hpp>
+
+#if defined _MSC_VER || defined __clang__
+#include <ql/math/modifiedbessel.hpp>
+#endif
+
+const long double PIl = 3.141592653589793238462643383279502884L;
 
 namespace QuantLib {
 
@@ -31,20 +38,33 @@ namespace QuantLib {
     }
 
     long double NonCentralChiSquareDistribution::operator()(long double x) const {
-
+#if defined _MSC_VER || defined __clang__
         if (x == 0)
             return 0;
-        else if (df_ < 2) {
+        if (df_ < 2) {
             long double v = 1 - df_ / 2;
             return 0.5 * std::exp(-0.5 * (x + ncp_)) *
                    std::pow((x / ncp_), df_ / 4 - 0.5) * (
-                           std::cyl_bessel_il(v, std::sqrt(ncp_ * x)) + 2 * std::sin(M_PIl * v) *
-                                                                        std::cyl_bessel_kl(v, std::sqrt(ncp_ * x)) /
-                                                                        M_PIl);
-        } else
+                           modifiedBesselFunction_i_Press(v, std::sqrt(ncp_ * x)) + 2 * std::sin(PIl * v) *
+                           modifiedBesselFunction_k_Press(v, std::sqrt(ncp_ * x)) / PIl);
+        } 
+        return 0.5 * std::exp(-0.5 * (x + ncp_)) *
+               std::pow((x / ncp_), df_ / 4 - 0.5) *
+               modifiedBesselFunction_i_Press(df_ / 2 - 1, std::sqrt(ncp_ * x));
+#else
+        if (x == 0)
+            return 0;
+        if (df_ < 2) {
+            long double v = 1 - df_ / 2;
             return 0.5 * std::exp(-0.5 * (x + ncp_)) *
-                   std::pow((x / ncp_), df_ / 4 - 0.5) *
-                   std::cyl_bessel_il(df_ / 2 - 1, std::sqrt(ncp_ * x));
+                   std::pow((x / ncp_), df_ / 4 - 0.5) * (
+                   std::cyl_bessel_il(v, std::sqrt(ncp_ * x)) + 2 * std::sin(PIl * v) *
+                   std::cyl_bessel_kl(v, std::sqrt(ncp_ * x)) / PIl);
+        }
+        return 0.5 * std::exp(-0.5 * (x + ncp_)) *
+               std::pow((x / ncp_), df_ / 4 - 0.5) *
+               std::cyl_bessel_il(df_ / 2 - 1, std::sqrt(ncp_ * x));
+#endif
     }
 
     long double CumulativeNonCentralChiSquareDistribution::operator()(long double x) const {
@@ -54,21 +74,58 @@ namespace QuantLib {
         const long double errmax = 1e-14;
         const Size itrmax = 10000;
         long double lam = 0.5 * ncp_;
+        long double f2 = 0.5 * df_;
+        long double x2 = 0.5 * x;
+
+        // for large x, algorithm described in `Computing discrete mixtures of continuous distributions:
+        // noncentral chisquare, noncentral t and the distribution of the square of the sample multiple correlation coeficient.`
+        // D. Benton, K. Krishnamoorthy. Computational Statistics & Data Analysis 43 (2003) 249 - 267
+        // code adapted from Boost
+        if (x > ncp_ + df_) {
+            int k = static_cast<int>(std::round(lam));
+            long double poisf = std::exp(std::log(lam) * k - lam - std::lgamma(static_cast<long double>(1 + k)));
+            long double poisb = poisf * k / lam;
+            long double gamf = 1 - incompleteGammaFunction(f2 + k, x2);
+            long double xtermf = std::exp(std::log(x2) * (f2 + k) - x2 - std::lgamma(f2 + 1 + k));
+            long double xtermb = xtermf * (f2 + k) / x2;
+            long double gamb = gamf - xtermb;
+
+            int i;
+            long double sum = -1;
+            for (i = k; i - k < itrmax; ++i) {
+                long double term = poisf * gamf;
+                sum += term;
+                poisf *= lam / (i + 1);
+                gamf += xtermf;
+                xtermf *= x2 / (f2 + i + 1);
+                if (((sum == 0) || (fabs(term / sum) < errmax)) && (term >= poisf * gamf))
+                    break;
+            }
+            QL_REQUIRE(i - k < itrmax, "CumulativeNonCentralChiSquareDistribution does not converge for degree of freedom = "
+            << df_ <<", non-centrality = " << ncp_ <<", x = " << x );
+
+            for (i = k - 1; i >= 0; --i) {
+                long double term = poisb * gamb;
+                sum += term;
+                poisb *= i / lam;
+                xtermb *= (f2 + i) / x2;
+                gamb -= xtermb;
+                if ((sum == 0) || (fabs(term / sum) < errmax))
+                    break;
+            }
+            return -sum;
+        }
 
         long double u = std::exp(-lam);
         long double v = u;
-        long double x2 = 0.5 * x;
-        long double f2 = 0.5 * df_;
         long double f_x_2n = df_ - x + 2.0;
 
         long double t = 0.0;
         if (f2 * QL_EPSILON > 0.125 &&
             std::fabs(x2 - f2) < std::sqrt(QL_EPSILON) * f2) {
-            t = std::exp((1 - t) *
-                         (2 - t / (f2 + 1))) / std::sqrt(2.0 * M_PIl * (f2 + 1.0));
+            t = std::exp((1 - t) * (2 - t / (f2 + 1))) / std::sqrt(2.0 * PIl * (f2 + 1.0));
         } else {
-            t = std::exp(f2 * std::log(x2) - x2 -
-                         std::lgamma(f2 + 1));
+            t = std::exp(f2 * std::log(x2) - x2 - std::lgamma(f2 + 1));
         }
 
         long double ans = v * t;
@@ -87,8 +144,8 @@ namespace QuantLib {
                     return ans;
             }
         }
-        QL_FAIL("didn't converge");
-
+        QL_FAIL("CumulativeNonCentralChiSquareDistribution does not converge for degree of freedom = "
+                << df_ <<", non-centrality = " << ncp_ <<", x = " << x );
     }
 
     InverseCumulativeNonCentralChiSquare::

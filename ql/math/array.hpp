@@ -1,6 +1,7 @@
 /* -*- mode: c++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /*
+ Copyright (C) 2017 Hao Zhang
  Copyright (C) 2000, 2001, 2002, 2003 RiskMap srl
  Copyright (C) 2003, 2004, 2005, 2006, 2009 StatPro Italia srl
  Copyright (C) 2004 Ferdinando Ametrano
@@ -128,6 +129,10 @@ namespace QuantLib {
 
         //! whether the array is empty
         bool empty() const;
+
+        //! get raw pointer from array
+        Real* data() noexcept;
+        const Real* data() const noexcept;
 
         //@}
         typedef Size size_type;
@@ -407,7 +412,7 @@ namespace QuantLib {
 
     inline Real &Array::operator[](Size i) {
 #if defined(QL_EXTRA_SAFETY_CHECKS)
-        QL_REQUIRE(i < data_.size()_,
+        QL_REQUIRE(i < data_.size(),
             "index (" << i << ") must be less than " << data_.size() <<
             ": array access out of range");
 #endif
@@ -441,6 +446,13 @@ namespace QuantLib {
 
     inline bool Array::empty() const {
         return data_.empty();
+    }
+
+    inline Real* Array::data() noexcept {
+        return data_.data();
+    }
+    inline const Real* Array::data() const noexcept {
+        return data_.data();
     }
 
     inline Array::const_iterator Array::begin() const {
@@ -479,7 +491,6 @@ namespace QuantLib {
         using std::swap;
         data_.swap(from.data_);
     }
-
 
     // dot product
 

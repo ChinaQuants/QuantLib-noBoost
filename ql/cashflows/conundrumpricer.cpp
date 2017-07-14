@@ -35,16 +35,6 @@
 #include <ql/time/schedule.hpp>
 #include <ql/instruments/vanillaswap.hpp>
 
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#endif
-
-#if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4))
-#pragma GCC diagnostic pop
-#endif
-
-using namespace std::placeholders;
 namespace QuantLib {
 
 //===========================================================================//
@@ -59,6 +49,9 @@ namespace QuantLib {
     forwardValue_(forwardValue), expiryDate_(expiryDate), swapTenor_(swapTenor),
         volatilityStructure_(volatilityStructure),
         smile_(volatilityStructure_->smileSection(expiryDate_, swapTenor_)) {
+        QL_REQUIRE(volatilityStructure->volatilityType() == ShiftedLognormal &&
+                   close_enough(volatilityStructure->shift(expiryDate,swapTenor),0.0),
+                   "BlackVanillaOptionPricer: zero-shift lognormal volatility required");
         }
 
     Real BlackVanillaOptionPricer::operator()(Real strike,
@@ -232,7 +225,7 @@ namespace QuantLib {
 
         class Spy {
           public:
-            Spy(std::function<Real (Real)> f) : f_(f) {}
+            explicit Spy(std::function<Real (Real)> f) : f_(f) {}
             Real value(Real x){
                 abscissas.emplace_back(x);
                 Real value = f_(x);
@@ -295,12 +288,12 @@ namespace QuantLib {
                 upperBoundary = std::max(a,std::min(upperBoundary, hardUpperLimit_));
                 if (upperBoundary > 2*a){
                     Size k = 3;
-                    std::function<Real (Real)> temp = std::ref(integrand);
+                    std::function<Real (Real)> temp = integrand;
                     VariableChange variableChange(temp, a, upperBoundary, k);
-                    f = std::bind(&VariableChange::value, &variableChange, _1);
+                    f = [&variableChange](Real x){return variableChange.value(x);};
                     result = gaussKronrodNonAdaptive(f, .0, 1.0);
                 } else {
-                    f = std::ref(integrand);
+                    f = integrand;
                     result = gaussKronrodNonAdaptive(f, a, upperBoundary);
                 }
 
